@@ -1,0 +1,61 @@
+---
+/**
+ * Navbar.astro — Barra de Navegación con Cápsula Morph Flotante
+ */
+---
+
+<nav class="navbar" id="navbar">
+  <div class="navbar__inner">
+    <a href="#hero" class="navbar__logo">
+      <img src="/Logo/logo oficial/png/logosimple_png.png" alt="Familia Dental">
+      <div class="navbar__logo-text">
+        Familia Dental
+        <small>Centro de Alta Especialidad</small>
+      </div>
+    </a>
+
+    <div class="navbar__links">
+      <a href="#hero" data-i18n="nav_home">Inicio</a>
+      <a href="#about" data-i18n="nav_about">Nosotros</a>
+      <a href="#services" data-i18n="nav_services">Servicios</a>
+      <a href="#gallery" data-i18n="nav_gallery">Galería</a>
+      <a href="#team" data-i18n="nav_team">Equipo</a>
+      <a href="#contact" data-i18n="nav_contact">Contacto</a>
+    </div>
+
+    <div class="navbar__actions">
+      <div class="lang-toggle">
+        <button data-lang="es" class="active">ES</button>
+        <button data-lang="en">EN</button>
+      </div>
+
+      <a href="#contact" class="btn-cta">
+        <span data-i18n="nav_cta">Agendar Cita</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <button class="navbar__hamburger" id="hamburger" aria-label="Menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hero" data-i18n="nav_home">Inicio</a>
+  <a href="#about" data-i18n="nav_about">Nosotros</a>
+  <a href="#services" data-i18n="nav_services">Servicios</a>
+  <a href="#gallery" data-i18n="nav_gallery">Galería</a>
+  <a href="#team" data-i18n="nav_team">Equipo</a>
+  <a href="#testimonials" data-i18n="nav_testimonials">Testimonios</a>
+  <a href="#contact" data-i18n="nav_contact">Contacto</a>
+  <a href="#blog" data-i18n="nav_blog">Blog</a>
+  <a href="#faq" data-i18n="nav_faq">FAQ</a>
+  <div class="mobile-lang-toggle" style="display:flex;gap:8px;margin-top:1rem;">
+    <button data-lang="es" class="active" style="padding:0.5rem 1rem;background:var(--color-accent);color:white;border-radius:8px;font-weight:600;font-size:0.9rem;">ES</button>
+    <button data-lang="en" style="padding:0.5rem 1rem;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);border-radius:8px;font-weight:600;font-size:0.9rem;">EN</button>
+  </div>
+</div>

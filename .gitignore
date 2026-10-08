@@ -1,7 +1,11 @@
-# Dependencias
+# Entorno Astro y compilación
 node_modules/
-package.json
-package-lock.json
+dist/
+.astro/
+
+# Archivos estáticos en la raíz (ahora viven en public/ y src/)
+Logo/
+assets/
 
 # Material de Imprenta y Papelería Física
 PDF_Para_Imprenta/
@@ -24,7 +28,7 @@ process_*.js
 enhance_*.js
 
 # Bocetos descartados de logos (solo conservar logo oficial)
-Logo/*.jpeg
+public/Logo/*.jpeg
 
 # Archivos del sistema
 .DS_Store

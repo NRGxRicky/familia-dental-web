@@ -1,0 +1,38 @@
+---
+/**
+ * index.astro — Página Principal de Familia Dental
+ * Centro de Alta Especialidad Odontológica
+ */
+
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Services from '../components/Services.astro';
+import Gallery from '../components/Gallery.astro';
+import Team from '../components/Team.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Contact from '../components/Contact.astro';
+import Blog from '../components/Blog.astro';
+import FAQ from '../components/FAQ.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="Familia Dental — Centro de Alta Especialidad Odontológica"
+  description="Cuidamos tu sonrisa, cuidamos tu familia. Especialistas en ortodoncia, implantología, estética y odontopediatría con tecnología de vanguardia."
+>
+  <Navbar />
+  <main>
+    <Hero />
+    <About />
+    <Services />
+    <Gallery />
+    <Team />
+    <Testimonials />
+    <Contact />
+    <Blog />
+    <FAQ />
+  </main>
+  <Footer />
+</Layout>

@@ -1,0 +1,129 @@
+---
+/**
+ * Contact.astro — Información de Contacto, Formulario y Mapa
+ */
+---
+
+<section class="contact section" id="contact">
+  <div class="container">
+    <div class="contact__grid">
+      <div class="contact__info">
+        <span class="section-label" data-i18n="contact_label">Contáctanos</span>
+        <h2 class="section-title" data-i18n="contact_title">Estamos listos para atenderte</h2>
+        <p data-i18n="contact_subtitle">Agenda tu cita hoy y da el primer paso hacia la sonrisa que siempre soñaste.</p>
+
+        <div class="contact__details">
+          <div class="contact__detail reveal">
+            <div class="contact__detail-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <h4 data-i18n="contact_address_title">Dirección</h4>
+              <p data-i18n="contact_address">Av. Principal #123, Col. Centro, Ciudad, CP 00000</p>
+            </div>
+          </div>
+
+          <div class="contact__detail reveal">
+            <div class="contact__detail-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <div>
+              <h4 data-i18n="contact_phone_title">Teléfono</h4>
+              <a href="tel:+520000000000" data-i18n="contact_phone">+52 (000) 000-0000</a>
+            </div>
+          </div>
+
+          <div class="contact__detail reveal">
+            <div class="contact__detail-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <h4 data-i18n="contact_email_title">Correo</h4>
+              <a href="mailto:info@familiadental.com" data-i18n="contact_email">info@familiadental.com</a>
+            </div>
+          </div>
+
+          <div class="contact__detail reveal">
+            <div class="contact__detail-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div>
+              <h4 data-i18n="contact_hours_title">Horario</h4>
+              <p>Lun - Vie: 9:00 - 19:00<br>Sáb: 9:00 - 14:00</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact__form-wrapper">
+        <form id="contactForm" class="contact__form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="formName" data-i18n="form_name">Nombre Completo</label>
+              <input type="text" id="formName" placeholder="Tu nombre" required>
+              <span class="error-msg" id="nameError" data-i18n="form_name_error">Por favor ingresa tu nombre</span>
+            </div>
+            <div class="form-group">
+              <label for="formPhone" data-i18n="form_phone">Teléfono</label>
+              <input type="tel" id="formPhone" placeholder="+52 (000) 000-0000" required>
+              <span class="error-msg" id="phoneError" data-i18n="form_phone_error">Por favor ingresa un teléfono válido</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="formEmail" data-i18n="form_email">Correo Electrónico</label>
+            <input type="email" id="formEmail" placeholder="tu@correo.com" required>
+            <span class="error-msg" id="emailError" data-i18n="form_email_error">Por favor ingresa un correo válido</span>
+          </div>
+
+          <div class="form-group">
+            <label for="formService" data-i18n="form_service">Servicio de Interés</label>
+            <select id="formService">
+              <option value="" data-i18n="form_service_default">Selecciona un servicio</option>
+              <option value="ortodoncia" data-i18n="svc1_title">Ortodoncia</option>
+              <option value="implantologia" data-i18n="svc2_title">Implantología</option>
+              <option value="estetica" data-i18n="svc3_title">Estética Dental</option>
+              <option value="odontopediatria" data-i18n="svc4_title">Odontopediatría</option>
+              <option value="endodoncia" data-i18n="svc5_title">Endodoncia</option>
+              <option value="periodoncia" data-i18n="svc6_title">Periodoncia</option>
+              <option value="cirugia" data-i18n="svc7_title">Cirugía Maxilofacial</option>
+              <option value="protesis" data-i18n="svc8_title">Prótesis Dental</option>
+              <option value="rehabilitacion" data-i18n="svc9_title">Rehabilitación General</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="formMessage" data-i18n="form_message">Mensaje (opcional)</label>
+            <textarea id="formMessage" rows="4" placeholder="Cuéntanos sobre tu caso..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit" data-i18n="form_submit">Enviar Solicitud</button>
+
+          <div class="form-success" style="display:none; text-align:center; padding:1rem; background:rgba(16,185,129,0.08); border-radius:0.75rem; color:#10B981; font-weight:500; margin-top:0.5rem;">
+            <p data-i18n="form_success">¡Gracias! Tu solicitud ha sido enviada. Nos pondremos en contacto pronto.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP SECTION -->
+<section class="map-section" id="map">
+  <iframe 
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3762.661406795559!2d-99.16869468510474!3d19.427023486886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1ff35f5bd1563%3A0x6c366f0e2de02ff7!2sZócalo!5e0!3m2!1ses!2smx!4v1" 
+    allowfullscreen="" 
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    title="Ubicación de Familia Dental">
+  </iframe>
+  <div class="map-section__card reveal">
+    <h3 data-i18n="map_title">Encuéntranos</h3>
+    <p data-i18n="contact_address">Av. Principal #123, Col. Centro, Ciudad, CP 00000</p>
+    <p>Lun - Vie: 9:00 - 19:00<br>Sáb: 9:00 - 14:00</p>
+    <a href="https://maps.google.com" target="_blank" rel="noopener" class="map-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span data-i18n="map_directions">Cómo Llegar</span>
+    </a>
+  </div>
+</section>

@@ -1,0 +1,62 @@
+---
+/**
+ * Gallery.astro — Galería con Sliders Interactivos Antes/Después
+ */
+---
+
+<section class="gallery section" id="gallery">
+  <div class="container">
+    <div class="gallery__header">
+      <span class="section-label" data-i18n="gallery_label">Transformaciones</span>
+      <h2 class="section-title" data-i18n="gallery_title">Sonrisas que hablan por sí solas</h2>
+      <p class="section-subtitle" style="color:rgba(248,246,243,0.6);" data-i18n="gallery_subtitle">Resultados reales de nuestros pacientes. Desliza para comparar el antes y después.</p>
+    </div>
+
+    <div class="gallery__carousel">
+      <!-- Slider 1 -->
+      <div class="gallery__item">
+        <div class="ba-slider">
+          <div class="ba-slider__after">
+            <img src="/assets/images/smile_gallery.jpg" alt="Después del tratamiento">
+          </div>
+          <div class="ba-slider__before">
+            <img src="/assets/images/smile_gallery.jpg" alt="Antes del tratamiento" style="filter: sepia(0.4) brightness(0.85) contrast(0.9);">
+          </div>
+          <div class="ba-slider__handle"></div>
+          <span class="ba-slider__label ba-slider__label--before" data-i18n="gallery_before">Antes</span>
+          <span class="ba-slider__label ba-slider__label--after" data-i18n="gallery_after">Después</span>
+        </div>
+      </div>
+
+      <!-- Slider 2 -->
+      <div class="gallery__item">
+        <div class="ba-slider">
+          <div class="ba-slider__after">
+            <img src="/assets/images/smile_gallery.jpg" alt="Después del tratamiento" style="filter: saturate(1.2);">
+          </div>
+          <div class="ba-slider__before">
+            <img src="/assets/images/smile_gallery.jpg" alt="Antes del tratamiento" style="filter: sepia(0.5) brightness(0.8) saturate(0.6);">
+          </div>
+          <div class="ba-slider__handle"></div>
+          <span class="ba-slider__label ba-slider__label--before" data-i18n="gallery_before">Antes</span>
+          <span class="ba-slider__label ba-slider__label--after" data-i18n="gallery_after">Después</span>
+        </div>
+      </div>
+
+      <!-- Slider 3 -->
+      <div class="gallery__item">
+        <div class="ba-slider">
+          <div class="ba-slider__after">
+            <img src="/assets/images/smile_gallery.jpg" alt="Después del tratamiento" style="filter: brightness(1.1);">
+          </div>
+          <div class="ba-slider__before">
+            <img src="/assets/images/smile_gallery.jpg" alt="Antes del tratamiento" style="filter: sepia(0.3) brightness(0.75) contrast(0.85) saturate(0.7);">
+          </div>
+          <div class="ba-slider__handle"></div>
+          <span class="ba-slider__label ba-slider__label--before" data-i18n="gallery_before">Antes</span>
+          <span class="ba-slider__label ba-slider__label--after" data-i18n="gallery_after">Después</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

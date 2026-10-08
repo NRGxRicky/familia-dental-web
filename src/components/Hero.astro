@@ -1,0 +1,65 @@
+---
+/**
+ * Hero.astro — Super Flow Hero Slider con Ken Burns & Glass Pagination
+ */
+---
+
+<section class="hero" id="hero">
+  <!-- Super Flow Background Slider -->
+  <div class="hero__slider swiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <div class="hero__slide-bg">
+          <img src="/assets/images/hero_clinic.jpg" alt="Clínica Dental Moderna">
+        </div>
+      </div>
+      <div class="swiper-slide">
+        <div class="hero__slide-bg">
+          <img src="/assets/images/about_interior.jpg" alt="Instalaciones Premium">
+        </div>
+      </div>
+      <div class="swiper-slide">
+        <div class="hero__slide-bg">
+          <img src="/assets/images/smile_gallery.jpg" alt="Diseño de Sonrisa">
+        </div>
+      </div>
+      <div class="swiper-slide">
+        <div class="hero__slide-bg">
+          <img src="/assets/images/blog_orthodontics.jpg" alt="Ortodoncia Invisible">
+        </div>
+      </div>
+    </div>
+    <!-- Super Flow Glass Capsule Pagination -->
+    <div class="hero__pagination swiper-pagination"></div>
+  </div>
+
+  <div class="hero__overlay"></div>
+
+  <div class="hero__content">
+    <div class="hero__logo">
+      <img src="/Logo/logo oficial/png/logov2_blanco.png" alt="Familia Dental Logo">
+    </div>
+    <h1 class="hero__title">
+      <span data-i18n="hero_title_1">Cuidamos tu</span> 
+      <span class="highlight" data-i18n="hero_title_2">sonrisa,</span><br>
+      <span data-i18n="hero_title_3">cuidamos tu familia.</span>
+    </h1>
+    <p class="hero__subtitle" data-i18n="hero_subtitle">Centro de Alta Especialidad Odontológica con tecnología de vanguardia y un equipo humano comprometido con tu bienestar.</p>
+    <p class="hero__tagline" data-i18n="hero_tagline">Donde la ciencia se encuentra con la calidez.</p>
+    <div class="hero__actions">
+      <a href="#contact" class="hero__btn-primary">
+        <span data-i18n="hero_btn_primary">Agendar Cita</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </a>
+      <a href="#about" class="hero__btn-secondary">
+        <span data-i18n="hero_btn_secondary">Conocer Más</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero__scroll-indicator">
+    <span data-i18n="hero_scroll">Descubre</span>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</section>
