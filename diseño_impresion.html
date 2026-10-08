@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Familia Dental — Centro de Impresión</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-primary: #152F4E;
+      --color-accent-cyan: #3AAAE1;
+      --color-gold: #C8A96E;
+      --color-gold-light: #E8D3A7;
+      --color-cream: #FAF9F6;
+      --font-heading: 'Playfair Display', Georgia, serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background-color: #0F172A;
+      color: #F8FAFC;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hub-container {
+      max-width: 900px;
+      width: 90%;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .brand-logo {
+      height: 90px;
+      margin-bottom: 1.5rem;
+      filter: drop-shadow(0 6px 15px rgba(0,0,0,0.5));
+    }
+
+    h1 {
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
+      color: var(--color-gold-light);
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      font-size: 1rem;
+      color: #94A3B8;
+      margin-bottom: 3rem;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .hub-card {
+      background: linear-gradient(145deg, #152F4E 0%, #0B192C 100%);
+      border: 1px solid rgba(200, 169, 110, 0.4);
+      border-radius: 14px;
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .hub-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px rgba(200, 169, 110, 0.25);
+      border-color: var(--color-gold);
+    }
+
+    .hub-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(200, 169, 110, 0.12);
+      border: 1px solid var(--color-gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hub-icon svg {
+      width: 30px;
+      height: 30px;
+      fill: var(--color-gold-light);
+    }
+
+    .hub-card h2 {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      color: var(--color-gold-light);
+    }
+
+    .hub-card p {
+      font-size: 0.85rem;
+      color: #CBD5E1;
+      line-height: 1.5;
+    }
+
+    .btn-action {
+      margin-top: 0.5rem;
+      padding: 0.75rem 1.6rem;
+      background: linear-gradient(135deg, #C8A96E 0%, #A48347 100%);
+      color: #0B192C;
+      font-weight: 700;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hub-container">
+    <img class="brand-logo" src="Logo/logo oficial/png/logocompleto_blanco.png" alt="Familia Dental Logo">
+    <h1>Centro de Impresión y Maquetación</h1>
+    <p class="subtitle">Selecciona qué elemento deseas visualizar o imprimir de forma independiente:</p>
+
+    <div class="cards-grid">
+      <!-- OPCIÓN 1: TARJETAS DE PRESENTACIÓN -->
+      <a href="tarjetas_presentacion.html" class="hub-card">
+        <div class="hub-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4V8h16v10zm-2-1h-6v-2h6v2zm0-3h-6v-2h6v2zm0-3h-6V9h6v2z"/></svg>
+        </div>
+        <h2>Tarjetas de Presentación</h2>
+        <p>Visualiza únicamente las tarjetas en tamaño estándar 3.5" x 2" con sus 3 estilos e imprime por separado.</p>
+        <span class="btn-action">Abrir Tarjetas ➔</span>
+      </a>
+
+      <!-- OPCIÓN 2: TABLOIDES -->
+      <a href="tabloide_impresion.html" class="hub-card">
+        <div class="hub-icon">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg>
+        </div>
+        <h2>Tabloides (11" x 17")</h2>
+        <p>Visualiza únicamente los afiches publicitarios verticales con sus 3 estilos e imprime por separado.</p>
+        <span class="btn-action">Abrir Tabloides ➔</span>
+      </a>
+
+      <!-- OPCIÓN 3: RECETARIO MÉDICO (2 EN CARTA) -->
+      <a href="receta_impresion.html" class="hub-card">
+        <div class="hub-icon">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+        </div>
+        <h2>Recetario Médico (2 en Carta)</h2>
+        <p>Visualiza e imprime las recetas de la Dra. Laura Santos Cruz acomodadas a 2 por hoja Carta con línea de corte.</p>
+        <span class="btn-action">Abrir Recetario ➔</span>
+      </a>
+
+      <!-- OPCIÓN 4: HOJA MEMBRETADA (TAMAÑO CARTA) -->
+      <a href="hoja_membretada_impresion.html" class="hub-card">
+        <div class="hub-icon">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+        </div>
+        <h2>Hoja Membretada (Tamaño Carta)</h2>
+        <p>Hoja membretada oficial en tamaño Carta completo, con encabezado verde, marca de agua y pie institucional sin datos de paciente.</p>
+        <span class="btn-action">Abrir Hoja Membretada ➔</span>
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>
