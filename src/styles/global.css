@@ -393,6 +393,7 @@ input, textarea, select {
   color: rgba(255, 255, 255, 0.85);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  white-space: nowrap;
   position: relative;
   transition: color var(--transition-fast);
 }
