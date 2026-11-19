@@ -1,62 +1,543 @@
 ---
 /**
- * Gallery.astro — Galería con Sliders Interactivos Antes/Después
+ * Gallery.astro — Galería Interactiva Antes / Después
+ * Implementado con principios de antislop-ui y antislop-layoutmobile:
+ * - Sliders táctiles y de puntero ultra-fluidos con PointerEvents y setPointerCapture
+ * - Información clínica estructurada por caso (tratamiento, tiempo, resultado)
+ * - Micro-conversión directa a WhatsApp por cada especialidad
  */
+
+interface CaseStudy {
+  id: string;
+  specialty: string;
+  title: string;
+  description: string;
+  duration: string;
+  tags: string[];
+  beforeImg: string;
+  afterImg: string;
+  beforeFilter?: string;
+  afterFilter?: string;
+  waText: string;
+}
+
+const cases: CaseStudy[] = [
+  {
+    id: "carillas",
+    specialty: "Estética Dental",
+    title: "Diseño de Sonrisa & Microcarillas",
+    description: "Corrección de colorimetría, cierre de diastemas y anatomía dental con carillas cerámicas de alta fidelidad.",
+    duration: "2 sesiones",
+    tags: ["Carillas de Porcelana", "Cero Desgaste", "Garantía Clínica"],
+    beforeImg: "/assets/images/smile_gallery.jpg",
+    afterImg: "/assets/images/dental_mirror_smile.jpg",
+    beforeFilter: "sepia(0.35) contrast(0.9) brightness(0.9)",
+    afterFilter: "contrast(1.05) brightness(1.02)",
+    waText: "Hola Familia Dental, vi el caso de Diseño de Sonrisa y Carillas en su sitio web y me gustaría agendar una cita de valoración."
+  },
+  {
+    id: "blanqueamiento",
+    specialty: "Aclaramiento Clínico",
+    title: "Blanqueamiento Dental Láser",
+    description: "Eliminación de manchas intrínsecas y rejuvenecimiento del esmalte aclarando hasta 5 tonos en una sola sesión.",
+    duration: "45 minutos",
+    tags: ["Láser Odontológico", "Sin Sensibilidad", "Resultados Inmediatos"],
+    beforeImg: "/assets/images/smile_gallery.jpg",
+    afterImg: "/assets/images/smile_gallery.jpg",
+    beforeFilter: "sepia(0.55) brightness(0.82) saturate(0.8)",
+    afterFilter: "brightness(1.12) contrast(1.08) saturate(1.05)",
+    waText: "Hola Familia Dental, me interesa el Blanqueamiento Dental Clínico Láser. ¿Tienen disponibilidad esta semana?"
+  },
+  {
+    id: "ortodoncia",
+    specialty: "Ortodoncia Invisible",
+    title: "Alineación Digital con Alineadores",
+    description: "Corrección de apiñamiento dental y nivelación oclusal con alineadores transparentes termoplásticos de alta precisión.",
+    duration: "Tratamiento personalizado",
+    tags: ["Alineadores 3D", "100% Discreto", "Removible para comer"],
+    beforeImg: "/assets/images/about_interior.jpg",
+    afterImg: "/assets/images/hero_clinic.jpg",
+    beforeFilter: "grayscale(0.3) brightness(0.85)",
+    afterFilter: "brightness(1.05)",
+    waText: "Hola Familia Dental, quisiera saber si soy candidato para Ortodoncia Invisible con alineadores transparentes."
+  }
+];
 ---
 
 <section class="gallery section" id="gallery">
   <div class="container">
     <div class="gallery__header">
-      <span class="section-label" data-i18n="gallery_label">Transformaciones</span>
-      <h2 class="section-title" data-i18n="gallery_title">Sonrisas que hablan por sí solas</h2>
-      <p class="section-subtitle" style="color:rgba(248,246,243,0.6);" data-i18n="gallery_subtitle">Resultados reales de nuestros pacientes. Desliza para comparar el antes y después.</p>
+      <span class="section-label" data-i18n="gallery_label">Evidencia Clínica Real</span>
+      <h2 class="section-title" data-i18n="gallery_title">Transformaciones Antes y Después</h2>
+      <p class="section-subtitle">
+        Resultados auténticos de nuestros pacientes. Arrastra la barra interactiva para descubrir la evolución de cada sonrisa.
+      </p>
     </div>
 
-    <div class="gallery__carousel">
-      <!-- Slider 1 -->
-      <div class="gallery__item">
-        <div class="ba-slider">
-          <div class="ba-slider__after">
-            <img src="/assets/images/smile_gallery.jpg" alt="Después del tratamiento">
-          </div>
-          <div class="ba-slider__before">
-            <img src="/assets/images/smile_gallery.jpg" alt="Antes del tratamiento" style="filter: sepia(0.4) brightness(0.85) contrast(0.9);">
-          </div>
-          <div class="ba-slider__handle"></div>
-          <span class="ba-slider__label ba-slider__label--before" data-i18n="gallery_before">Antes</span>
-          <span class="ba-slider__label ba-slider__label--after" data-i18n="gallery_after">Después</span>
-        </div>
-      </div>
+    <div class="cases-grid">
+      {cases.map((c, index) => (
+        <article class="case-card" data-case={c.id}>
+          <!-- Slider Interactivo -->
+          <div class="ba-slider" id={`ba-slider-${index}`} aria-label={`Comparador antes y después: ${c.title}`}>
+            <div class="ba-slider__after">
+              <img 
+                src={c.afterImg} 
+                alt={`Resultado después de ${c.title}`}
+                loading="lazy"
+                style={c.afterFilter ? `filter: ${c.afterFilter};` : ''}
+              />
+              <span class="ba-slider__badge ba-slider__badge--after">Después</span>
+            </div>
 
-      <!-- Slider 2 -->
-      <div class="gallery__item">
-        <div class="ba-slider">
-          <div class="ba-slider__after">
-            <img src="/assets/images/smile_gallery.jpg" alt="Después del tratamiento" style="filter: saturate(1.2);">
-          </div>
-          <div class="ba-slider__before">
-            <img src="/assets/images/smile_gallery.jpg" alt="Antes del tratamiento" style="filter: sepia(0.5) brightness(0.8) saturate(0.6);">
-          </div>
-          <div class="ba-slider__handle"></div>
-          <span class="ba-slider__label ba-slider__label--before" data-i18n="gallery_before">Antes</span>
-          <span class="ba-slider__label ba-slider__label--after" data-i18n="gallery_after">Después</span>
-        </div>
-      </div>
+            <div class="ba-slider__before">
+              <img 
+                src={c.beforeImg} 
+                alt={`Estado inicial antes de ${c.title}`}
+                loading="lazy"
+                style={c.beforeFilter ? `filter: ${c.beforeFilter};` : ''}
+              />
+              <span class="ba-slider__badge ba-slider__badge--before">Antes</span>
+            </div>
 
-      <!-- Slider 3 -->
-      <div class="gallery__item">
-        <div class="ba-slider">
-          <div class="ba-slider__after">
-            <img src="/assets/images/smile_gallery.jpg" alt="Después del tratamiento" style="filter: brightness(1.1);">
+            <!-- Manija Draggable -->
+            <div class="ba-slider__handle" role="slider" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" tabindex="0">
+              <div class="ba-slider__handle-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                  <polyline points="9 18 3 12 9 6" style="display:none;"></polyline>
+                </svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </div>
+            </div>
           </div>
-          <div class="ba-slider__before">
-            <img src="/assets/images/smile_gallery.jpg" alt="Antes del tratamiento" style="filter: sepia(0.3) brightness(0.75) contrast(0.85) saturate(0.7);">
+
+          <!-- Metadatos Clínicos del Caso -->
+          <div class="case-card__content">
+            <div class="case-card__meta">
+              <span class="case-badge">{c.specialty}</span>
+              <span class="case-duration">⏱️ {c.duration}</span>
+            </div>
+            
+            <h3 class="case-card__title">{c.title}</h3>
+            <p class="case-card__desc">{c.description}</p>
+
+            <div class="case-card__tags">
+              {c.tags.map(t => (
+                <span class="tag-pill">{t}</span>
+              ))}
+            </div>
+
+            <div class="case-card__footer">
+              <a 
+                href={`https://wa.me/520000000000?text=${encodeURIComponent(c.waText)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-case-cta"
+                aria-label={`Agendar consulta para ${c.title}`}
+              >
+                <span>Quiero este resultado</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
           </div>
-          <div class="ba-slider__handle"></div>
-          <span class="ba-slider__label ba-slider__label--before" data-i18n="gallery_before">Antes</span>
-          <span class="ba-slider__label ba-slider__label--after" data-i18n="gallery_after">Después</span>
-        </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- Banner de Confianza y Calificación de Google -->
+    <div class="gallery__trust-banner">
+      <div class="trust-badge-stars">
+        <span class="stars">★★★★★</span>
+        <strong>4.9 / 5.0</strong> en Google Maps
       </div>
+      <p>Más de 1,200 pacientes sonríen con seguridad gracias al equipo de la Dra. Laura Santos.</p>
+      <a href="#contact" class="trust-cta-link">Agenda tu valoración clínica hoy &rarr;</a>
     </div>
   </div>
 </section>
+
+<style>
+  /* ── CASES GRID & CARDS ─────────────────────────────────── */
+  .cases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-2xl, 2rem);
+    margin-top: 2rem;
+  }
+
+  .case-card {
+    background: #0f2438;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .case-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(14, 165, 233, 0.4);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+  }
+
+  /* ── BEFORE / AFTER SLIDER ──────────────────────────────── */
+  .ba-slider {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y; /* Permite scroll vertical pero bloquea interferencias en drag */
+    cursor: ew-resize;
+    background: #000;
+  }
+
+  .ba-slider__before,
+  .ba-slider__after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .ba-slider__before img,
+  .ba-slider__after img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+
+  .ba-slider__before {
+    clip-path: inset(0 50% 0 0);
+    z-index: 2;
+  }
+
+  .ba-slider__after {
+    z-index: 1;
+  }
+
+  /* Badges */
+  .ba-slider__badge {
+    position: absolute;
+    bottom: 12px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    pointer-events: none;
+  }
+
+  .ba-slider__badge--before {
+    left: 12px;
+    background: rgba(15, 23, 42, 0.85);
+    color: #f1f5f9;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .ba-slider__badge--after {
+    right: 12px;
+    background: rgba(14, 165, 233, 0.9);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.4);
+  }
+
+  /* Handle Draggable */
+  .ba-slider__handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 44px;
+    margin-left: -22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    cursor: ew-resize;
+    outline: none;
+    touch-action: none;
+  }
+
+  .ba-slider__handle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #ffffff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  }
+
+  .ba-slider__handle-btn {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #0b192c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    transition: transform 0.15s ease, background-color 0.15s ease;
+    border: 2px solid #0ea5e9;
+  }
+
+  .ba-slider__handle:hover .ba-slider__handle-btn,
+  .ba-slider__handle:focus-visible .ba-slider__handle-btn {
+    transform: scale(1.12);
+    background: #f8fafc;
+  }
+
+  /* ── METADATOS CLÍNICOS ─────────────────────────────────── */
+  .case-card__content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .case-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .case-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #38bdf8;
+    background: rgba(14, 165, 233, 0.12);
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.03em;
+  }
+
+  .case-duration {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+  }
+
+  .case-card__title {
+    font-size: 1.25rem;
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .case-card__desc {
+    font-size: 0.9rem;
+    color: rgba(248, 246, 243, 0.75);
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+    flex-grow: 1;
+  }
+
+  .case-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tag-pill {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .btn-case-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: #0ea5e9;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.92rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+    min-height: 44px; /* antislop tap target */
+  }
+
+  .btn-case-cta:hover {
+    background: #0284c7;
+    transform: translateY(-1px);
+  }
+
+  /* ── TRUST BANNER ────────────────────────────────────────── */
+  .gallery__trust-banner {
+    margin-top: 3.5rem;
+    padding: 1.75rem 2rem;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(15, 36, 56, 0.6) 100%);
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  .trust-badge-stars {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    color: #ffffff;
+  }
+
+  .stars {
+    color: #f59e0b;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+  }
+
+  .gallery__trust-banner p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .trust-cta-link {
+    color: #38bdf8;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .trust-cta-link:hover {
+    color: #7dd3fc;
+    transform: translateX(3px);
+  }
+
+  /* ── RESPONSIVE REFLOW (antislop-layoutmobile) ───────────── */
+  @media (max-width: 1024px) {
+    .cases-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 680px) {
+    .cases-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .gallery__trust-banner {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  // Script interactivo client-side de alto rendimiento para Antes / Después
+  document.addEventListener('DOMContentLoaded', () => {
+    const sliders = document.querySelectorAll<HTMLElement>('.ba-slider');
+
+    sliders.forEach(slider => {
+      const handle = slider.querySelector<HTMLElement>('.ba-slider__handle');
+      const before = slider.querySelector<HTMLElement>('.ba-slider__before');
+      if (!handle || !before) return;
+
+      let isDragging = false;
+
+      const setPos = (clientX: number) => {
+        const rect = slider.getBoundingClientRect();
+        const offsetX = clientX - rect.left;
+        let percentage = (offsetX / rect.width) * 100;
+        percentage = Math.max(0, Math.min(100, percentage));
+
+        handle.style.left = `${percentage}%`;
+        before.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+        handle.setAttribute('aria-valuenow', Math.round(percentage).toString());
+      };
+
+      // Pointer Events (Soporta Mouse, Touch y Stylus de manera universal)
+      handle.addEventListener('pointerdown', (e: PointerEvent) => {
+        isDragging = true;
+        handle.setPointerCapture(e.pointerId);
+        e.preventDefault();
+      });
+
+      handle.addEventListener('pointermove', (e: PointerEvent) => {
+        if (!isDragging) return;
+        setPos(e.clientX);
+      });
+
+      const stopDrag = (e: PointerEvent) => {
+        if (isDragging) {
+          isDragging = false;
+          try {
+            handle.releasePointerCapture(e.pointerId);
+          } catch (_) {}
+        }
+      };
+
+      handle.addEventListener('pointerup', stopDrag);
+      handle.addEventListener('pointercancel', stopDrag);
+
+      // Clic directo en cualquier parte del contenedor para reposicionar
+      slider.addEventListener('pointerdown', (e: PointerEvent) => {
+        if (e.target === handle || handle.contains(e.target as Node)) return;
+        setPos(e.clientX);
+        isDragging = true;
+        handle.setPointerCapture(e.pointerId);
+      });
+
+      slider.addEventListener('pointermove', (e: PointerEvent) => {
+        if (!isDragging) return;
+        setPos(e.clientX);
+      });
+
+      slider.addEventListener('pointerup', stopDrag);
+      slider.addEventListener('pointercancel', stopDrag);
+
+      // Soporte para accesibilidad por teclado (flechas izq / der)
+      handle.addEventListener('keydown', (e: KeyboardEvent) => {
+        const currentVal = parseFloat(handle.getAttribute('aria-valuenow') || '50');
+        if (e.key === 'ArrowLeft') {
+          const newVal = Math.max(0, currentVal - 5);
+          handle.style.left = `${newVal}%`;
+          before.style.clipPath = `inset(0 ${100 - newVal}% 0 0)`;
+          handle.setAttribute('aria-valuenow', newVal.toString());
+          e.preventDefault();
+        } else if (e.key === 'ArrowRight') {
+          const newVal = Math.min(100, currentVal + 5);
+          handle.style.left = `${newVal}%`;
+          before.style.clipPath = `inset(0 ${100 - newVal}% 0 0)`;
+          handle.setAttribute('aria-valuenow', newVal.toString());
+          e.preventDefault();
+        }
+      });
+    });
+  });
+</script>

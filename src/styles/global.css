@@ -2132,6 +2132,113 @@ input, textarea, select {
 }
 
 /* ── RESPONSIVE ADJUSTMENTS ───────────────────────────────── */
+/* Hero Trust Badge (antislop-ui & persuasion-audit) */
+.hero__trust-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(15, 36, 56, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 40px;
+  padding: 0.5rem 1.25rem;
+  margin-top: 1.5rem;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  flex-wrap: wrap;
+}
+
+.hero__trust-badge .trust-stars {
+  color: #f59e0b;
+  font-size: 1rem;
+  letter-spacing: 2px;
+}
+
+.hero__trust-badge .trust-rating {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.hero__trust-badge .trust-bullet {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.hero__trust-badge .trust-patients {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+/* Mobile Bottom Sticky Bar (antislop-layoutmobile) */
+.mobile-sticky-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .mobile-sticky-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: rgba(11, 25, 44, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.65rem 1rem;
+    padding-bottom: calc(0.65rem + env(safe-area-inset-bottom, 0px));
+    gap: 0.75rem;
+    z-index: 999;
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.45);
+  }
+
+  .mobile-sticky-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 48px;
+    min-height: 48px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+
+  .mobile-sticky-btn--call {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .mobile-sticky-btn--wa {
+    background: #25D366;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+  }
+
+  .whatsapp-btn {
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    right: 1rem;
+    width: 52px;
+    height: 52px;
+  }
+
+  .scroll-top {
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    right: 4.8rem;
+  }
+}
+
 @media (max-width: 480px) {
   .hero__actions {
     flex-direction: column;
@@ -2142,5 +2249,11 @@ input, textarea, select {
   .hero__btn-secondary {
     width: 100%;
     justify-content: center;
+  }
+
+  .hero__trust-badge {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.9rem;
+    gap: 5px;
   }
 }
