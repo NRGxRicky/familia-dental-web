@@ -1,0 +1,146 @@
+---
+/**
+ * SEO.astro — Optimización Integral para Motores de Búsqueda e IA (Google, Bing, ChatGPT, Perplexity)
+ * Incluye Schema.org JSON-LD para Dentist & MedicalBusiness, Open Graph, Twitter Cards y Geo Tags
+ */
+
+export interface Props {
+  title?: string;
+  description?: string;
+  canonicalURL?: string;
+  image?: string;
+}
+
+const {
+  title = "Familia Dental — Centro de Alta Especialidad Odontológica",
+  description = "Centro de Alta Especialidad Odontológica. Expertos en implantología, ortodoncia invisible, diseño de sonrisa y odontopediatría con tecnología digital 3D. Agenda tu valoración hoy.",
+  canonicalURL = "https://familia-dental-web-nu.vercel.app",
+  image = "https://familia-dental-web-nu.vercel.app/assets/images/hero_clinic.jpg"
+} = Astro.props;
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["Dentist", "MedicalBusiness", "LocalBusiness"],
+      "@id": `${canonicalURL}/#clinic`,
+      "name": "Familia Dental — Centro de Alta Especialidad Odontológica",
+      "alternateName": "Familia Dental",
+      "legalName": "Familia Dental Odontología Integral S.A. de C.V.",
+      "description": description,
+      "url": canonicalURL,
+      "logo": `${canonicalURL}/Logo/logo%20oficial/png/logocompleto_png.png`,
+      "image": [
+        image,
+        `${canonicalURL}/assets/images/about_interior.jpg`,
+        `${canonicalURL}/assets/images/smile_gallery.jpg`
+      ],
+      "telephone": "+520000000000",
+      "email": "info@familiadental.com",
+      "priceRange": "$$",
+      "currenciesAccepted": "MXN, USD",
+      "paymentAccepted": "Cash, Credit Card, Debit Card, Transferencia",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Principal #123, Col. Centro",
+        "addressLocality": "Ciudad de México",
+        "addressRegion": "CDMX",
+        "postalCode": "06000",
+        "addressCountry": "MX"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 19.427023,
+        "longitude": -99.168695
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "19:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "14:00"
+        }
+      ],
+      "medicalSpecialty": [
+        "Dentistry",
+        "Orthodontics",
+        "PediatricDentistry",
+        "Periodontics",
+        "OralSurgery",
+        "Prosthodontics",
+        "Endodontics"
+      ],
+      "availableService": [
+        { "@type": "MedicalProcedure", "name": "Ortodoncia y Alineadores Invisibles" },
+        { "@type": "MedicalProcedure", "name": "Implantología Dental Avanzada" },
+        { "@type": "MedicalProcedure", "name": "Estética Dental y Diseño de Sonrisa" },
+        { "@type": "MedicalProcedure", "name": "Odontopediatría Integral" },
+        { "@type": "MedicalProcedure", "name": "Endodoncia Microscópica" },
+        { "@type": "MedicalProcedure", "name": "Periodoncia y Regeneración de Encías" },
+        { "@type": "MedicalProcedure", "name": "Cirugía Maxilofacial" },
+        { "@type": "MedicalProcedure", "name": "Prótesis Dental de Alta Gama" },
+        { "@type": "MedicalProcedure", "name": "Rehabilitación Oral y Resinas Estéticas" }
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "184",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "sameAs": [
+        "https://www.facebook.com",
+        "https://www.instagram.com",
+        "https://www.tiktok.com"
+      ]
+    },
+    {
+      "@type": "Physician",
+      "@id": `${canonicalURL}/#doctor-laura-santos`,
+      "name": "Dra. Laura Santos",
+      "jobTitle": "Especialista Odontológica y Directora Clínica",
+      "worksFor": {
+        "@id": `${canonicalURL}/#clinic`
+      },
+      "medicalSpecialty": "Dentistry"
+    }
+  ]
+};
+---
+
+<!-- Canonical & Robots -->
+<link rel="canonical" href={canonicalURL} />
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+<!-- Geo & Local SEO Tags -->
+<meta name="geo.region" content="MX-CMX" />
+<meta name="geo.placename" content="Ciudad de México" />
+<meta name="geo.position" content="19.427023;-99.168695" />
+<meta name="ICBM" content="19.427023, -99.168695" />
+
+<!-- Open Graph / Facebook / WhatsApp Preview -->
+<meta property="og:locale" content="es_MX" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Familia Dental" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={image} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Familia Dental — Clínica Odontológica de Alta Especialidad" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={image} />
+
+<!-- Structured Data / JSON-LD -->
+<script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
