@@ -1,0 +1,846 @@
+---
+/**
+ * BookingEstimator.astro — Cotizador Interactivo y Sistema de Reservas en Línea
+ * Construido según antislop-ui y antislop-layoutmobile:
+ * - Estimación transparente con cálculo de Meses Sin Intereses (MSI)
+ * - Selector de citas con fecha, horario y especialidad
+ * - Integración directa con WhatsApp para confirmación en menos de 5 min
+ * - Totalmente responsivo con zonas táctiles de 48px
+ */
+
+interface TreatmentOption {
+  id: string;
+  category: string;
+  name: string;
+  price: number;
+  description: string;
+  popular?: boolean;
+}
+
+const treatments: TreatmentOption[] = [
+  {
+    id: "limpieza",
+    category: "Prevención",
+    name: "Limpieza Ultrasónica + Diagnóstico",
+    price: 700,
+    description: "Eliminación de sarro, pulido profiláctico y revisión clínica integral.",
+    popular: true
+  },
+  {
+    id: "blanqueamiento",
+    category: "Estética",
+    name: "Blanqueamiento Dental Clínico Láser",
+    price: 2500,
+    description: "Aclara hasta 5 tonos en 1 sola sesión de 45 min sin sensibilidad."
+  },
+  {
+    id: "carilla",
+    category: "Estética",
+    name: "Carilla de Porcelana (por pieza)",
+    price: 3800,
+    description: "Diseño estético de alta fidelidad, corrección de tono y diastemas."
+  },
+  {
+    id: "ortodoncia",
+    category: "Ortodoncia",
+    name: "Ortodoncia Invisible (Alineadores)",
+    price: 24000,
+    description: "Alineación digital 3D sin brackets metálicos. Tratamiento completo.",
+    popular: true
+  },
+  {
+    id: "implante",
+    category: "Rehabilitación",
+    name: "Implante Dental de Titanio",
+    price: 13500,
+    description: "Reemplazo biocompatible de raíz dental con corona estética incluida."
+  },
+  {
+    id: "pediatria",
+    category: "Infantil",
+    name: "Consulta Odontopediátrica",
+    price: 650,
+    description: "Atención suave y amigable para niños con técnica libre de trauma."
+  },
+  {
+    id: "endodoncia",
+    category: "Endodoncia",
+    name: "Tratamiento de Conductos (Endodoncia)",
+    price: 2200,
+    description: "Salvamos tu pieza dental con tecnología rotatoria libre de dolor."
+  }
+];
+---
+
+<section class="booking-estimator section" id="booking">
+  <div class="container">
+    <div class="booking-estimator__header">
+      <span class="section-label">Transparencia y Comodidad</span>
+      <h2 class="section-title">Cotiza y Agenda Tu Cita en Línea</h2>
+      <p class="section-subtitle">
+        Calcula un estimado transparente de tus tratamientos con opción a Meses Sin Intereses y reserva tu horario preferido sin llamadas ni esperas.
+      </p>
+    </div>
+
+    <!-- Toggle de Vistas: Cotizador vs Agendador -->
+    <div class="interactive-panel">
+      <div class="panel-tabs" role="tablist">
+        <button class="tab-btn active" id="tabQuoterBtn" role="tab" aria-selected="true" aria-controls="quoterView">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>1. Cotizador de Tratamientos</span>
+        </button>
+        <button class="tab-btn" id="tabBookingBtn" role="tab" aria-selected="false" aria-controls="bookingView">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>2. Agendador de Citas 24/7</span>
+        </button>
+      </div>
+
+      <!-- VISTA 1: COTIZADOR INTERACTIVO -->
+      <div class="panel-view active" id="quoterView" role="tabpanel">
+        <div class="quoter-layout">
+          <!-- Lista de Tratamientos con Checkboxes -->
+          <div class="treatments-selector">
+            <div class="selector-heading">
+              <h3>Selecciona los tratamientos que te interesan:</h3>
+              <span class="selector-hint">Puedes marcar varios para calcular tu plan integral</span>
+            </div>
+
+            <div class="treatments-list">
+              {treatments.map((t) => (
+                <label class="treatment-item" for={`treatment-${t.id}`}>
+                  <input 
+                    type="checkbox" 
+                    id={`treatment-${t.id}`} 
+                    class="treatment-checkbox"
+                    value={t.price}
+                    data-name={t.name}
+                    data-id={t.id}
+                  />
+                  <div class="treatment-custom-box">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <div class="treatment-info">
+                    <div class="treatment-title-row">
+                      <span class="treatment-name">{t.name}</span>
+                      {t.popular && <span class="badge-popular">Más Solicitado</span>}
+                    </div>
+                    <p class="treatment-desc">{t.description}</p>
+                  </div>
+                  <div class="treatment-price">
+                    ${t.price.toLocaleString("es-MX")} <small>MXN</small>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <!-- Resumen de Cotización en Vivo -->
+          <div class="quote-summary-card">
+            <div class="summary-header">
+              <span class="summary-badge">Presupuesto Estimado</span>
+              <h4>Resumen de tu Plan</h4>
+            </div>
+
+            <div class="selected-items-list" id="selectedItemsList">
+              <p class="empty-state">Selecciona al menos un tratamiento para ver el desglose en tiempo real.</p>
+            </div>
+
+            <div class="summary-totals">
+              <div class="total-row">
+                <span>Total Estimado:</span>
+                <strong class="total-amount" id="totalAmount">$0 MXN</strong>
+              </div>
+              <div class="msi-row" id="msiRow" style="display:none;">
+                <span class="msi-icon">💳</span>
+                <div class="msi-text">
+                  <span>o hasta <strong>12 mensualidades</strong> de:</span>
+                  <strong class="msi-amount" id="msiAmount">$0 / mes</strong>
+                  <small>Aceptamos todas las tarjetas de crédito</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="summary-guarantee">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>El diagnóstico clínico final incluye radiografía y valoración personalizada sin compromiso.</span>
+            </div>
+
+            <button type="button" class="btn-proceed-booking" id="btnProceedBooking">
+              <span>Continuar con esta cotización</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA 2: AGENDADOR DE CITAS -->
+      <div class="panel-view" id="bookingView" role="tabpanel">
+        <form class="booking-form" id="bookingForm" novalidate>
+          <div class="booking-form__grid">
+            <!-- Especialidad -->
+            <div class="form-field full-width">
+              <label for="bookSpecialty">Especialidad o Tratamiento de interés *</label>
+              <select id="bookSpecialty" required>
+                <option value="">Selecciona una opción...</option>
+                <option value="Limpieza y Diagnóstico">Limpieza Ultrasónica y Diagnóstico</option>
+                <option value="Blanqueamiento Láser">Blanqueamiento Dental Láser</option>
+                <option value="Carillas Dentales">Diseño de Sonrisa y Carillas</option>
+                <option value="Ortodoncia Invisible">Ortodoncia Invisible (Alineadores)</option>
+                <option value="Implantes Dentales">Implantes y Rehabilitación</option>
+                <option value="Odontopediatría">Odontopediatría (Atención Infantil)</option>
+                <option value="Endodoncia">Endodoncia / Urgencia por Dolor</option>
+                <option value="Valoración General">Valoración General / Revisión Preventiva</option>
+              </select>
+            </div>
+
+            <!-- Fecha Preferida -->
+            <div class="form-field">
+              <label for="bookDate">Fecha de preferencia *</label>
+              <input type="date" id="bookDate" required />
+            </div>
+
+            <!-- Horario Preferido -->
+            <div class="form-field">
+              <label for="bookTime">Turno preferido *</label>
+              <select id="bookTime" required>
+                <option value="">Selecciona horario...</option>
+                <option value="Mañana (09:00 - 11:00)">Mañana (09:00 - 11:00)</option>
+                <option value="Mediodía (11:00 - 13:00)">Mediodía (11:00 - 13:00)</option>
+                <option value="Tarde (14:00 - 17:00)">Tarde (14:00 - 17:00)</option>
+                <option value="Cierre (17:00 - 19:00)">Cierre (17:00 - 19:00)</option>
+                <option value="Sábado por la mañana">Sábado por la mañana (09:00 - 14:00)</option>
+              </select>
+            </div>
+
+            <!-- Nombre -->
+            <div class="form-field">
+              <label for="bookName">Nombre y Apellido del paciente *</label>
+              <input type="text" id="bookName" placeholder="Ej. Carlos Mendoza" required />
+            </div>
+
+            <!-- Teléfono / WhatsApp -->
+            <div class="form-field">
+              <label for="bookPhone">Teléfono WhatsApp de contacto *</label>
+              <input type="tel" id="bookPhone" placeholder="Ej. 55 1234 5678" required />
+            </div>
+
+            <!-- Comentarios o Síntomas -->
+            <div class="form-field full-width">
+              <label for="bookNotes">¿Tienes alguna molestia o indicación especial? (Opcional)</label>
+              <textarea id="bookNotes" rows="2" placeholder="Ej. Tengo sensibilidad al frío en una muela o quisiera cotización para mis dos hijos..."></textarea>
+            </div>
+          </div>
+
+          <!-- Botón de Envío Inmediato -->
+          <div class="booking-submit-row">
+            <button type="submit" class="btn-submit-booking" id="btnSubmitBooking">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              <span>Confirmar y Enviar Solicitud de Cita</span>
+            </button>
+            <p class="booking-notice">
+              🔒 Confirmación sin esperas: serás redirigido a WhatsApp con tu solicitud lista para ser validada por recepción en menos de 5 minutos.
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── ESTILOS DEL CONTENEDOR ──────────────────────────────── */
+  .booking-estimator {
+    background: #081726;
+    color: #f8fafc;
+    position: relative;
+    padding: 6rem 0;
+  }
+
+  .booking-estimator__header {
+    text-align: center;
+    max-width: 780px;
+    margin: 0 auto 3rem;
+  }
+
+  /* ── TABS SELECTOR ───────────────────────────────────────── */
+  .interactive-panel {
+    background: #0f2438;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  }
+
+  .panel-tabs {
+    display: flex;
+    background: rgba(8, 23, 38, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 1.25rem 1.5rem;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border-bottom: 3px solid transparent;
+    min-height: 52px; /* antislop touch target */
+  }
+
+  .tab-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .tab-btn.active {
+    color: #38bdf8;
+    background: rgba(14, 165, 233, 0.08);
+    border-bottom-color: #38bdf8;
+  }
+
+  .panel-view {
+    display: none;
+    padding: 2.5rem;
+  }
+
+  .panel-view.active {
+    display: block;
+  }
+
+  /* ── COTIZADOR LAYOUT ────────────────────────────────────── */
+  .quoter-layout {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .selector-heading {
+    margin-bottom: 1.5rem;
+  }
+
+  .selector-heading h3 {
+    font-size: 1.25rem;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+  }
+
+  .selector-hint {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .treatments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .treatment-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    min-height: 48px;
+  }
+
+  .treatment-item:hover {
+    background: rgba(14, 165, 233, 0.06);
+    border-color: rgba(14, 165, 233, 0.3);
+  }
+
+  .treatment-checkbox {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .treatment-custom-box {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: transparent;
+    transition: all 0.2s ease;
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .treatment-checkbox:checked + .treatment-custom-box {
+    background: #0ea5e9;
+    border-color: #0ea5e9;
+    color: #ffffff;
+  }
+
+  .treatment-info {
+    flex-grow: 1;
+  }
+
+  .treatment-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .treatment-name {
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 1rem;
+  }
+
+  .badge-popular {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.15);
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .treatment-desc {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0.25rem 0 0;
+    line-height: 1.4;
+  }
+
+  .treatment-price {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #38bdf8;
+    white-space: nowrap;
+  }
+
+  .treatment-price small {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* ── RESUMEN DE COTIZACIÓN ───────────────────────────────── */
+  .quote-summary-card {
+    background: #0b1a29;
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    border-radius: 16px;
+    padding: 1.75rem;
+    position: sticky;
+    top: 100px;
+  }
+
+  .summary-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #38bdf8;
+    background: rgba(14, 165, 233, 0.12);
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .summary-header h4 {
+    font-size: 1.35rem;
+    color: #ffffff;
+    margin: 0.5rem 0 1rem;
+  }
+
+  .selected-items-list {
+    min-height: 80px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .empty-state {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .selected-item-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 0.4rem;
+  }
+
+  .summary-totals {
+    margin-bottom: 1.25rem;
+  }
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+  }
+
+  .total-row span {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .total-amount {
+    font-size: 1.75rem;
+    color: #38bdf8;
+    font-weight: 800;
+  }
+
+  .msi-row {
+    background: rgba(14, 165, 233, 0.08);
+    border: 1px dashed rgba(14, 165, 233, 0.35);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .msi-icon {
+    font-size: 1.5rem;
+  }
+
+  .msi-text {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.85rem;
+  }
+
+  .msi-amount {
+    color: #f59e0b;
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+
+  .msi-text small {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.75rem;
+  }
+
+  .summary-guarantee {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-proceed-booking {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 1rem;
+    background: #0ea5e9;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    min-height: 48px;
+  }
+
+  .btn-proceed-booking:hover {
+    background: #0284c7;
+    transform: translateY(-2px);
+  }
+
+  /* ── FORMULARIO DE AGENDADOR ─────────────────────────────── */
+  .booking-form__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-field.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .form-field label {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    min-height: 48px;
+  }
+
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus {
+    border-color: #38bdf8;
+    background: rgba(14, 165, 233, 0.08);
+  }
+
+  .form-field select option {
+    background: #0b192c;
+    color: #ffffff;
+  }
+
+  .booking-submit-row {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .btn-submit-booking {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+    padding: 1.15rem 2rem;
+    background: #25D366;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 800;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+    transition: transform 0.2s ease, background 0.2s ease;
+    min-height: 52px;
+  }
+
+  .btn-submit-booking:hover {
+    background: #20bd5a;
+    transform: translateY(-2px);
+  }
+
+  .booking-notice {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.65);
+    text-align: center;
+    max-width: 550px;
+  }
+
+  /* ── RESPONSIVE REFLOW (antislop-layoutmobile) ───────────── */
+  @media (max-width: 900px) {
+    .quoter-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .quote-summary-card {
+      position: static;
+      margin-top: 1.5rem;
+    }
+
+    .booking-form__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .panel-view {
+      padding: 1.5rem;
+    }
+
+    .tab-btn {
+      font-size: 0.9rem;
+      padding: 1rem 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // ── GESTIÓN DE PESTAÑAS (TABS) ──
+    const tabQuoterBtn = document.getElementById('tabQuoterBtn');
+    const tabBookingBtn = document.getElementById('tabBookingBtn');
+    const quoterView = document.getElementById('quoterView');
+    const bookingView = document.getElementById('bookingView');
+
+    const switchTab = (activeTab: 'quoter' | 'booking') => {
+      if (activeTab === 'quoter') {
+        tabQuoterBtn?.classList.add('active');
+        tabBookingBtn?.classList.remove('active');
+        tabQuoterBtn?.setAttribute('aria-selected', 'true');
+        tabBookingBtn?.setAttribute('aria-selected', 'false');
+        quoterView?.classList.add('active');
+        bookingView?.classList.remove('active');
+      } else {
+        tabBookingBtn?.classList.add('active');
+        tabQuoterBtn?.classList.remove('active');
+        tabBookingBtn?.setAttribute('aria-selected', 'true');
+        tabQuoterBtn?.setAttribute('aria-selected', 'false');
+        bookingView?.classList.add('active');
+        quoterView?.classList.remove('active');
+      }
+    };
+
+    tabQuoterBtn?.addEventListener('click', () => switchTab('quoter'));
+    tabBookingBtn?.addEventListener('click', () => switchTab('booking'));
+
+    // ── LÓGICA DEL COTIZADOR DINÁMICO ──
+    const checkboxes = document.querySelectorAll<HTMLInputElement>('.treatment-checkbox');
+    const selectedList = document.getElementById('selectedItemsList');
+    const totalAmount = document.getElementById('totalAmount');
+    const msiRow = document.getElementById('msiRow');
+    const msiAmount = document.getElementById('msiAmount');
+    const btnProceed = document.getElementById('btnProceedBooking');
+    const bookSpecialtySelect = document.getElementById('bookSpecialty') as HTMLSelectElement;
+
+    let selectedTreatments: { name: string; price: number }[] = [];
+
+    const recalculateQuote = () => {
+      selectedTreatments = [];
+      let total = 0;
+
+      checkboxes.forEach((cb) => {
+        if (cb.checked) {
+          const name = cb.getAttribute('data-name') || '';
+          const price = parseFloat(cb.value) || 0;
+          selectedTreatments.push({ name, price });
+          total += price;
+        }
+      });
+
+      // Actualizar listado visual
+      if (selectedList) {
+        if (selectedTreatments.length === 0) {
+          selectedList.innerHTML = '<p class="empty-state">Selecciona al menos un tratamiento para ver el desglose en tiempo real.</p>';
+        } else {
+          selectedList.innerHTML = selectedTreatments
+            .map(
+              (item) => `
+              <div class="selected-item-row">
+                <span>${item.name}</span>
+                <strong>$${item.price.toLocaleString('es-MX')}</strong>
+              </div>
+            `
+            )
+            .join('');
+        }
+      }
+
+      // Actualizar total
+      if (totalAmount) {
+        totalAmount.textContent = `$${total.toLocaleString('es-MX')} MXN`;
+      }
+
+      // Meses sin intereses (a partir de $1,500 MXN)
+      if (msiRow && msiAmount) {
+        if (total >= 1500) {
+          msiRow.style.display = 'flex';
+          const monthly = Math.round(total / 12);
+          msiAmount.textContent = `$${monthly.toLocaleString('es-MX')} / mes`;
+        } else {
+          msiRow.style.display = 'none';
+        }
+      }
+    };
+
+    checkboxes.forEach((cb) => {
+      cb.addEventListener('change', recalculateQuote);
+    });
+
+    // Botón continuar: pasa al formulario y preselecciona
+    btnProceed?.addEventListener('click', () => {
+      switchTab('booking');
+      if (selectedTreatments.length > 0 && bookSpecialtySelect) {
+        // Seleccionar primer tratamiento coincidente o general
+        bookSpecialtySelect.value = selectedTreatments[0].name.includes('Láser')
+          ? 'Blanqueamiento Láser'
+          : selectedTreatments[0].name.includes('Alineadores')
+          ? 'Ortodoncia Invisible'
+          : selectedTreatments[0].name.includes('Carilla')
+          ? 'Carillas Dentales'
+          : selectedTreatments[0].name.includes('Implante')
+          ? 'Implantes Dentales'
+          : 'Valoración General';
+      }
+      bookingView?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // ── LÓGICA DEL FORMULARIO DE RESERVA ──
+    const bookingForm = document.getElementById('bookingForm') as HTMLFormElement;
+    const dateInput = document.getElementById('bookDate') as HTMLInputElement;
+
+    // Establecer fecha mínima como hoy
+    if (dateInput) {
+      const today = new Date().toISOString().split('T')[0];
+      dateInput.min = today;
+      dateInput.value = today;
+    }
+
+    bookingForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const specialty = (document.getElementById('bookSpecialty') as HTMLSelectElement).value;
+      const date = (document.getElementById('bookDate') as HTMLInputElement).value;
+      const time = (document.getElementById('bookTime') as HTMLSelectElement).value;
+      const name = (document.getElementById('bookName') as HTMLInputElement).value.trim();
+      const phone = (document.getElementById('bookPhone') as HTMLInputElement).value.trim();
+      const notes = (document.getElementById('bookNotes') as HTMLTextAreaElement).value.trim();
+
+      if (!specialty || !date || !time || !name || !phone) {
+        alert('Por favor completa todos los campos requeridos (*).');
+        return;
+      }
+
+      // Preparar cotización adjunta si existe
+      let quoteText = '';
+      if (selectedTreatments.length > 0) {
+        const total = selectedTreatments.reduce((sum, item) => sum + item.price, 0);
+        quoteText = `\n💰 *Presupuesto Cotizado:* $${total.toLocaleString('es-MX')} MXN (${selectedTreatments.map(t => t.name).join(', ')})`;
+      }
+
+      // Construir mensaje profesional de WhatsApp
+      const msg = `¡Hola Familia Dental! 🦷 Me gustaría confirmar una cita de valoración en la clínica:
+👤 *Paciente:* ${name}
+📞 *Teléfono:* ${phone}
+🩺 *Tratamiento / Especialidad:* ${specialty}
+📅 *Fecha sugerida:* ${date}
+⏰ *Turno preferido:* ${time}${notes ? `\n📝 *Notas:* ${notes}` : ''}${quoteText}
+
+¿Tienen disponibilidad en este horario para confirmar mi cita? ¡Muchas gracias!`;
+
+      const waUrl = `https://wa.me/520000000000?text=${encodeURIComponent(msg)}`;
+      window.open(waUrl, '_blank');
+    });
+  });
+</script>
